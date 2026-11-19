@@ -14,6 +14,10 @@ var shown = false;
 // where he stands: right on top of the name card, in the middle
 var card = document.querySelector(".info");
 function place() {
+  if (window.matchMedia("(max-width: 700px)").matches) {   // phones: CSS puts him in the middle of the screen
+    leo.style.left = ""; leo.style.top = "";
+    return;
+  }
   var r = card.getBoundingClientRect();
   var top = r.top + window.scrollY;
   var text = card.querySelector(".name-swap");           // the first line of the card
