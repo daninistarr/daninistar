@@ -1781,3 +1781,19 @@ body.panel-open .drops { display: none; }   /* the column runs down this side */
 .leopard:hover .leo-spots, .leopard.is-hover .leo-spots { fill: #ff69be; }
 .leopard:hover .leo-star, .leopard.is-hover .leo-star { fill: url(#leo-rainbow); }
 
+
+
+/* ================= PHONES ONLY: steadier layout + no tap flash ================= */
+/* On phones the browser's address bar shrinks and grows while you scroll, which changes the
+   screen height. Sizes here use the steady height (svh) instead, so boxes don't shift around. */
+@media (max-width: 700px) {
+  :root { --text: clamp(13px, 1.8svh, 20px); }
+  .click-here { font-size: clamp(14px, 2.1svh, 26px); }
+  .info { bottom: 2.5svh; font-size: clamp(13px, 2svh, 24px); }
+  .stage { min-height: 100svh; }
+  .frame { height: 74svh; }
+  .thoughts { max-height: 45svh; }
+  .np-recent { max-height: 60svh; }
+  .watch-box { --watch-h: min(68svh, calc((100vw - 90px) * 16 / 9)); }
+  * { -webkit-tap-highlight-color: transparent; }   /* no grey box flashing behind the bears (or anything) when tapped */
+}

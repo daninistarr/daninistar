@@ -69,7 +69,12 @@ function openProject(i) {
       im.loop = true;
       im.autoplay = true;
       im.playsInline = true;
-      im.preload = "metadata";
+      // phones (iPhone especially) only autoplay a silent video if these are written on the tag itself
+      im.setAttribute("muted", "");
+      im.setAttribute("playsinline", "");
+      im.setAttribute("autoplay", "");
+      im.setAttribute("loop", "");
+      im.preload = "auto";
       im.setAttribute("aria-label", g.title);
       var cap = document.createElement("figcaption");
       var t = document.createElement("span");
@@ -89,6 +94,9 @@ function openProject(i) {
       fig.appendChild(im);
       fig.appendChild(cap);
       vids.appendChild(fig);
+    });
+    vids.querySelectorAll("video.gif-loop").forEach(function (v) {   // give each loop a nudge to start
+      var p = v.play(); if (p && p.catch) p.catch(function () {});
     });
     vids.hidden = false;
     vImg.hidden = true;

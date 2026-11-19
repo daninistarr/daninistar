@@ -131,11 +131,20 @@ var npNote   = document.getElementById("np-note");
 var recent   = document.getElementById("np-recent");
 var recentOl = document.getElementById("np-recent-list");
 
+function isPhone() { return window.matchMedia("(max-width: 700px)").matches; }
 function placeRecent() {
-  // sits right under the music box, same width — or under it in the page on phones
+  // sits right under the music box, same width
   var r = np.getBoundingClientRect();
-  recent.style.top   = r.bottom - 1 + "px";     // shares the box's bottom line
-  recent.style.left  = r.left + "px";
+  if (isPhone()) {
+    // phones: pinned into the page under the box, so it scrolls with it smoothly instead of chasing it
+    recent.style.position = "absolute";
+    recent.style.top   = (r.bottom - 1 + window.scrollY) + "px";
+    recent.style.left  = (r.left + window.scrollX) + "px";
+  } else {
+    recent.style.position = "";
+    recent.style.top   = r.bottom - 1 + "px";     // shares the box's bottom line
+    recent.style.left  = r.left + "px";
+  }
   recent.style.width = r.width + "px";
 }
 
@@ -213,7 +222,7 @@ document.addEventListener("keydown", function (e) {
   if (e.key === "Escape" && !recent.hidden) closeRecent();
 });
 window.addEventListener("resize", function () { if (!recent.hidden) placeRecent(); });
-window.addEventListener("scroll", function () { if (!recent.hidden) placeRecent(); }, true);
+window.addEventListener("scroll", function () { if (!recent.hidden && !isPhone()) placeRecent(); }, true);   // phones don't need it
 
 checkLastfm();
 setInterval(checkLastfm, CHECK_EVERY * 1000);
