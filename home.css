@@ -1497,6 +1497,7 @@ body.panel-open .drops { display: none; }   /* the column runs down this side */
 .watch-btn:focus-visible { outline: 1px dashed black; outline-offset: -4px; }
 
 .watch-box {
+  position: relative;                /* so the sound button can sit in the middle of the video */
   margin-top: -1px;                  /* shares the button's bottom line */
   background: white;
   border: 1px solid black;
@@ -1557,7 +1558,29 @@ body.panel-open .drops { display: none; }   /* the column runs down this side */
 .watch-bar { justify-content: space-between; }
 .watch-heart { width: 26px; height: 29px; flex: none; }
 .watch-label { flex: 1; text-align: center; }
-.watch-bar2 { justify-content: center; padding-top: 0.15em; }
+/* the sound button: in the middle of the video while it's paused — see-through white, so the picture still shows */
+.watch-mute {
+  position: absolute;
+  left: 50%;
+  top: calc(var(--watch-h) / 2);
+  transform: translate(-50%, -50%);
+  width: 64px;
+  height: 64px;
+  padding: 0;
+  border: 0;
+  background: none;
+  opacity: 0.7;                      /* see-through white, so the video still shows (change here) */
+  filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.35));   /* a soft shadow so it still shows on light videos */
+  cursor: pointer;
+}
+.watch-mute:hover { opacity: 0.9; }
+.watch-mute svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.watch-mute path { fill: none; stroke: white; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.watch-mute .spk { fill: white; }
+.watch-mute .cross { display: none; }
+.watch-mute.is-muted .waves { display: none; }
+.watch-mute.is-muted .cross { display: inline; }
+.watch-mute[hidden] { display: none; }
 
 /* no blue box around Click Here after clicking it (keyboard users still get an outline) */
 .click-here:focus { outline: none; }
@@ -1774,7 +1797,11 @@ body.panel-open .drops { display: none; }   /* the column runs down this side */
   color: black;
   white-space: nowrap;
 }
-@media (max-width: 700px) { .leopard { width: 120px; } }
+@media (max-width: 700px) {
+  /* phones: he just appears in the middle of whatever part of the page you're looking at — no rising */
+  .leopard { width: 120px; position: fixed; left: 50%; top: 50%; transform: translate(-50%, -40%); clip-path: none; }
+  .leo-inner, .leopard.is-up .leo-inner { transform: none; transition: none; }
+}
 
 /* hover the leopard: his spots turn Work pink and the stars go rainbow (like "Wish granted!") */
 .leo-svg { pointer-events: auto; cursor: pointer; }

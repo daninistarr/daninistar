@@ -210,22 +210,22 @@ var projects = [
       "9.5 x 12.5 in"
     ],
     "images": [
-      "5/ISSUE5.png",
-      "5/1.png",
-      "5/2.png",
-      "5/3.png",
-      "5/4.png",
-      "5/5.png",
-      "5/6.png",
-      "5/7.png",
-      "5/8.png",
-      "5/9.png",
-      "5/10.png",
-      "5/11.png",
-      "5/12.png",
-      "5/13.png",
-      "5/14.png",
-      "5/back1.png"
+      "5/ISSUE5.webp",
+      "5/1.webp",
+      "5/2.webp",
+      "5/3.webp",
+      "5/4.webp",
+      "5/5.webp",
+      "5/6.webp",
+      "5/7.webp",
+      "5/8.webp",
+      "5/9.webp",
+      "5/10.webp",
+      "5/11.webp",
+      "5/12.webp",
+      "5/13.webp",
+      "5/14.webp",
+      "5/back1.webp"
     ],
     "link": "https://superstarsonlymag.com/",
     "linkText": "superstarsonlymag.com"
@@ -240,12 +240,12 @@ var projects = [
       "7.25 x 8 in"
     ],
     "images": [
-      "txt/1.png",
-      "txt/2.png",
-      "txt/3.png",
-      "txt/4.png",
-      "txt/5.png",
-      "txt/6.png"
+      "txt/1.webp",
+      "txt/2.webp",
+      "txt/3.webp",
+      "txt/4.webp",
+      "txt/5.webp",
+      "txt/6.webp"
     ],
     "link": "https://www.txtbooks.us/product/txtreader-4/",
     "linkText": "TXTbooks"
@@ -275,16 +275,16 @@ var projects = [
       "8.5 x 11 in"
     ],
     "images": [
-      "4/ISSUE4.png",
-      "4/1.png",
-      "4/2.png",
-      "4/3.png",
-      "4/4.png",
-      "4/5.png",
-      "4/6.png",
-      "4/7.png",
-      "4/8.png",
-      "4/ssosites1.png"
+      "4/ISSUE4.webp",
+      "4/1.webp",
+      "4/2.webp",
+      "4/3.webp",
+      "4/4.webp",
+      "4/5.webp",
+      "4/6.webp",
+      "4/7.webp",
+      "4/8.webp",
+      "4/ssosites1.webp"
     ],
     "link": "https://superstarsonlymag.com/",
     "linkText": "superstarsonlymag.com"
@@ -299,19 +299,18 @@ var projects = [
       "8 x 10.4 in"
     ],
     "images": [
-      "3/ISSUE3.png",
-      "3/1.png",
-      "3/2.png",
-      "3/3.png",
-      "3/4.png",
-      "3/5.png",
-      "3/7.png",
-      "3/8.png",
-      "3/9.png",
-      "3/11.png",
-      "3/12.png",
-      "3/13.png",
-      "3/riso.png"
+      "3/ISSUE3.webp",
+      "3/2.webp",
+      "3/3.webp",
+      "3/4.webp",
+      "3/5.webp",
+      "3/7.webp",
+      "3/8.webp",
+      "3/9.webp",
+      "3/11.webp",
+      "3/12.webp",
+      "3/13.webp",
+      "3/riso.webp"
     ],
     "link": "https://superstarsonlymag.com/",
     "linkText": "superstarsonlymag.com"
@@ -326,13 +325,13 @@ var projects = [
       "8 x 10.5 in"
     ],
     "images": [
-      "2/ISSUE2.png",
-      "2/1.png",
-      "2/3.png",
-      "2/4.png",
-      "2/5.png",
-      "2/7.png",
-      "2/8.png"
+      "2/ISSUE2.webp",
+      "2/1.webp",
+      "2/3.webp",
+      "2/4.webp",
+      "2/5.webp",
+      "2/7.webp",
+      "2/8.webp"
     ],
     "link": "https://superstarsonlymag.com/",
     "linkText": "superstarsonlymag.com"
@@ -366,16 +365,16 @@ var projects = [
       "8 x 10.5 in"
     ],
     "images": [
-      "1/ISSUE1.png",
-      "1/1.png",
-      "1/2.png",
-      "1/3.png",
-      "1/5.png",
-      "1/6.png",
-      "1/7.png",
-      "1/8.png",
-      "1/9.png",
-      "1/10.png"
+      "1/ISSUE1.webp",
+      "1/1.webp",
+      "1/2.webp",
+      "1/3.webp",
+      "1/5.webp",
+      "1/6.webp",
+      "1/7.webp",
+      "1/8.webp",
+      "1/9.webp",
+      "1/10.webp"
     ],
     "link": "https://superstarsonlymag.com/",
     "linkText": "superstarsonlymag.com"
