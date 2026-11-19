@@ -1,0 +1,1783 @@
+/* ---------- ONE TEXT SIZE for the whole site (change here) ---------- */
+:root {
+  --text: clamp(13px, 1.8dvh, 20px);
+}
+
+/* ---------- HOMEPAGE ---------- */
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: white;
+  overflow: hidden;              /* no scrolling on the homepage */
+}
+
+/* the whole window */
+.stage {
+  --anchor-y: 41;               /* where "Click Here" sits: % down the picture area (change to move it) */
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* the picture area — the whole window on computers;
+   on phones it sits above the Now Playing box */
+.frame {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  container-type: size;          /* lets the portrait size itself to this area (cqh units) */
+}
+
+/* The portrait is always as tall as the picture area.
+   home.js sets for each portrait:
+     --ratio  its width / height
+     --x, --y the point between the eyes, as a fraction (0.5 = middle)
+   and the image shifts so that point lands exactly under "Click Here". */
+.portrait {
+  --ratio: 1;
+  --x: 0.5;
+  --y: 0.408;
+  position: absolute;
+  height: 100cqh;
+  width: calc(100cqh * var(--ratio));
+  max-width: none;
+  left: calc(50% - var(--x) * var(--ratio) * 100cqh);
+  top: calc(var(--anchor-y) * 1cqh - var(--y) * 100cqh);
+}
+
+/* "Click Here" — fixed in the center */
+.click-here {
+  position: absolute;
+  left: 50%;
+  top: calc(var(--anchor-y) * 1%);
+  transform: translate(-50%, -50%);
+  font-family: "Times New Roman", Times, serif;
+  font-weight: bold;
+  font-size: clamp(14px, 2.1dvh, 26px);
+  line-height: 1;
+  color: #f2ab7c;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  padding: 0.4em 0.6em;          /* bigger tap area on phones */
+  z-index: 2;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.click-here:hover {
+  color: red;
+}
+
+/* contact info, fixed at the bottom center */
+.info {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 2.5dvh;
+  text-align: center;
+  font-family: "Times New Roman", Times, serif;
+  font-weight: bold;
+  font-size: clamp(13px, 2dvh, 24px);   /* the name card keeps its own, bigger size */
+  line-height: 1.25;
+  color: black;
+  z-index: 2;
+}
+
+.info a {
+  color: black;
+  text-decoration: none;
+}
+
+.info a:hover {
+  color: #9900ff;
+}
+
+/* ---- hover "New York, NY": an apple pops up over it (the text stays visible behind) ---- */
+.big-apple {
+  position: relative;
+  display: inline-block;
+  cursor: default;
+  outline: none;
+}
+
+.big-apple::after {
+  content: "🍎";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.15em;                 /* apple size */
+  line-height: 1;
+  display: none;                     /* hidden until hover — no animation */
+  pointer-events: none;
+}
+
+.big-apple:hover::after,
+.big-apple:focus-visible::after {
+  display: block;
+}
+
+/* ---- hover the name: "Danini Star" in shimmering gold ---- */
+.name-swap {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;                /* it's a link back to the homepage */
+  outline: none;
+}
+
+.name-real {
+  transition: opacity 0.05s;
+}
+
+.name-star {
+  position: absolute;
+  inset: -0.5em -1em;                /* sits over the name, no shifting */
+  font-family: "Apple Chancery", "Snell Roundhand", "Zapfino", cursive;
+  font-weight: normal;
+  font-size: 1.35em;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.05s;         /* how fast it fades in */
+}
+
+/* two copies stacked: the shadow behind, the gold on top */
+.star-shadow,
+.star-gold {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+/* tiny, faint drop shadow */
+.star-shadow {
+  color: rgba(0, 0, 0, 0.22);        /* shadow darkness */
+  transform: translate(1px, 1px);    /* shadow offset */
+}
+
+/* gold, with diagonal bands of light sweeping to the right.
+   The pattern tiles perfectly, so the loop never jumps. */
+.star-gold {
+  background-image: repeating-linear-gradient(125deg,
+    #a8842a 0em, #d4af37 1.8em, #fff4b8 2.7em, #d4af37 3.6em, #a8842a 6em);
+  /* one tile = exactly one repeat of the diagonal pattern (10em / sin & cos of the angle) */
+  background-size: 7.324em 10.460em;
+  background-repeat: repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-stroke: 0.5px black;  /* thin black stroke */
+  animation: gold-shimmer 1.8s linear infinite;   /* shimmer speed: bigger = slower */
+}
+
+.name-swap:hover .name-real,
+.name-swap:focus-visible .name-real {
+  opacity: 0;
+}
+
+.name-swap:hover .name-star,
+.name-swap:focus-visible .name-star {
+  opacity: 1;
+}
+
+
+@keyframes gold-shimmer {
+  from { background-position: 0 0; }
+  to   { background-position: 7.324em 0; }    /* exactly one tile, so the loop is seamless */
+}
+
+
+/* ---------- NOW PLAYING (top right) ---------- */
+
+.now-playing {
+  position: absolute;
+  top: 0;                        /* tucked into the top right corner of the window */
+  right: 0;
+  z-index: 6;                    /* on top, so the shooting star comes out from behind it */
+  width: min(85vw, 20em);        /* box width (change here) */
+  display: flex;
+  flex-wrap: wrap;               /* top bar on its own row */
+  align-items: center;
+  gap: 0 0.7em;
+  font-family: "Times New Roman", Times, serif;
+  font-weight: bold;
+  font-size: var(--text);
+  line-height: 1.2;
+  color: black;
+  text-align: right;
+
+  /* the box */
+  background: white;
+  border: 1px solid black;
+  padding: 0.45em 0.6em;
+}
+
+.now-playing[hidden],
+.now-playing [hidden] {
+  display: none;
+}
+
+/* ---- top bar: LIVE | scrolling text | ♫ ---- */
+.np-header {
+  flex-basis: calc(100% + 1.2em);    /* full width of the box, edge to edge */
+  margin: -0.45em -0.6em 0.45em;     /* pulls it up into the box's corners */
+  min-width: 0;                      /* keeps the scrolling text inside the box */
+  display: flex;
+  align-items: stretch;
+  border-bottom: 1px solid black;
+}
+
+.np-header > div {
+  padding: 0.2em 0.5em;
+  display: flex;
+  align-items: center;
+}
+
+/* red LIVE with a blinking dot, only while playing */
+.np-live {
+  flex: none;
+  gap: 0.35em;
+  color: red;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: #d9d9d9;               /* grey box */
+  border-right: 1px solid black;
+}
+
+.np-dot {
+  width: 0.6em;
+  height: 0.6em;
+  border-radius: 50%;
+  background: red;
+  animation: np-blink 1.4s ease-in-out infinite;
+}
+
+@keyframes np-blink {
+  50% { opacity: 0.25; }
+}
+
+/* the middle box: "What I'm listening 2" */
+.np-label {
+  flex: 1;
+  min-width: 0;
+  justify-content: center;
+  white-space: nowrap;
+  overflow: hidden;
+  background: white;                 /* its own box (change the color here) */
+  color: black;
+}
+
+/* music note */
+.np-note {
+  flex: none;
+  background: white;
+  border-left: 1px solid black;
+  color: black;
+  cursor: pointer;                   /* click for Recently Played */
+  outline: none;
+}
+.np-note:hover { background: #e1ff00; }   /* the note's box turns yellow; the note stays black */
+.np-note:focus-visible { outline: 1px dashed black; outline-offset: -3px; }
+
+/* ---- song + play (left) | leopard (middle) | cover (right) — always one row ---- */
+.np-body {
+  flex-basis: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  min-width: 0;
+}
+
+.np-text {
+  flex: 0 1 auto;                    /* shrinks for long names ("…") instead of pushing the cover down */
+  min-width: 0;
+  text-align: left;                  /* song, artist, date and Play on the left */
+}
+
+.np-leopard {
+  flex: none;
+  height: 3em;                       /* leopard size */
+  width: auto;
+  margin: 0 auto;                    /* centered between the info and the cover */
+}
+
+/* when the leopard is hidden, keep the cover on the right */
+.np-leopard[hidden] ~ .np-art {
+  margin-left: auto;
+}
+
+.np-title,
+.np-artist {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;           /* long names end in "…" */
+}
+
+.np-artist {
+  font-weight: normal;
+}
+
+/* date + time under the artist */
+.np-when {
+  font-weight: normal;
+  font-style: italic;
+  font-size: 0.85em;
+  color: #555;
+  white-space: nowrap;
+}
+
+/* album cover */
+.np-art {
+  flex: none;
+  width: 4.4em;
+  height: 4.4em;
+  object-fit: cover;
+  border: 1px solid black;           /* stroke — stays on when it turns into a spinning circle */
+}
+
+/* play / pause */
+.np-button {
+  margin-top: 0.15em;
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  color: black;
+  cursor: pointer;
+}
+
+.np-button:hover {
+  color: #9900ff;
+}
+
+.np-button:focus {
+  outline: none;                     /* no blue ring after clicking */
+}
+
+.np-button:focus-visible {
+  outline: 1px dashed black;         /* still visible for keyboard users */
+}
+
+/* spins the cover while the preview plays */
+.now-playing.is-playing .np-art {
+  animation: np-spin 6s linear infinite;
+  border-radius: 50%;
+}
+
+@keyframes np-spin {
+  to { transform: rotate(360deg); }
+}
+
+
+/* ---------- PHONES ---------- */
+/* The Now Playing box moves below the picture, so it never covers the portrait. */
+
+@media (max-width: 700px) {
+  .now-playing {
+    position: relative;
+    top: auto;
+    right: auto;
+    flex: none;
+    align-self: center;
+    width: calc(100% - 24px);
+    max-width: none;
+    margin: 10px auto max(12px, env(safe-area-inset-bottom));  /* clears the iPhone home bar */
+  }
+}
+
+
+/* ================= WORK (shown in place of the portraits) ================= */
+
+/* work background color */
+body.show-work .stage {
+  background: #ff69be;
+}
+
+/* while showing work: hide the portrait + Click Here */
+body.show-work .portrait,
+body.show-work .click-here {
+  display: none;
+}
+
+/* the scrolling work area, clear of the music box (top) and name card (bottom) */
+.work {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  padding-top: calc(var(--space-top, 0px) + 8px);
+  padding-bottom: calc(var(--space-bottom, 0px) + 12px);
+  z-index: 1;
+  font-family: "Times New Roman", Times, serif;
+  font-weight: bold;
+}
+
+.work a { color: black; text-decoration: none; }
+.work a:hover { color: #9900ff; }
+
+/* ---- the grid of projects ---- */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));   /* tile size */
+  gap: 36px 24px;
+  padding: 20px 20px 10px;
+}
+
+.tile {
+  display: flex;                  /* keeps every tile lined up at the top */
+  flex-direction: column;
+  justify-content: flex-start;
+  align-self: start;
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  color: black;
+  text-align: left;
+  cursor: pointer;
+}
+
+.tile-img {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: contain;            /* shows the whole piece, never cropped */
+  background: white;              /* each image sits in a white box */
+  padding: 10px;                  /* white space around the image inside the box */
+  border: 1px solid black;        /* thin black stroke around each box */
+  display: block;
+}
+
+.tile-title {
+  margin-top: 8px;
+  font-size: var(--text);
+  line-height: 1.2;
+}
+
+.tile-meta {
+  font-weight: normal;
+  font-size: 12px;                /* secondary info: smaller */
+}
+
+.tile:hover .tile-title,
+.tile:focus-visible .tile-title {
+  color: #9900ff;
+}
+
+.tile:focus { outline: none; }
+.tile:focus-visible { outline: 1px dashed black; outline-offset: 4px; }
+
+/* ---- the viewer ---- */
+.viewer {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  background: white;
+  display: grid;
+  --space: 44px;                     /* white space around the image (same on every side) */
+  grid-template-columns: var(--space) 1fr var(--space);
+  grid-template-rows: var(--space) 1fr auto;   /* row 1 holds the ×, row 2 the image, row 3 the caption */
+}
+
+.viewer[hidden],
+.viewer [hidden] { display: none; }
+
+.v-stage {
+  grid-column: 2;
+  grid-row: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  padding: 0;
+}
+
+.v-stage img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.v-prev, .v-next, .v-close {
+  border: none;
+  background: none;
+  font: inherit;
+  font-size: 44px;
+  line-height: 1;
+  color: black;
+  cursor: pointer;
+}
+
+.v-prev { grid-column: 1; grid-row: 2; }
+.v-next { grid-column: 3; grid-row: 2; }
+
+/* × sits in its own row above the image, in the top right corner */
+.v-close {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  justify-self: end;
+  align-self: center;
+  padding: 0 10px;
+  font-size: 32px;
+}
+
+.v-prev:hover, .v-next:hover, .v-close:hover { color: #9900ff; }
+.v-prev:focus, .v-next:focus, .v-close:focus { outline: none; }
+
+.v-caption {
+  grid-column: 1 / -1;
+  grid-row: 3;
+  text-align: center;
+  padding: 12px var(--space) var(--space);
+  font-size: var(--text);
+  line-height: 1.3;
+}
+
+.v-title { }
+.v-details { font-weight: normal; font-size: 12px; }   /* secondary info: smaller */
+.v-link { display: inline-block; margin-top: 2px; }
+.v-count { margin-top: 4px; font-weight: normal; font-size: 11px; color: #555; }
+
+/* phones (work) */
+@media (max-width: 700px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 26px 14px;
+    padding: 14px 14px 10px;
+  }
+  .viewer { --space: 32px; }
+  .v-prev, .v-next { font-size: 34px; }
+}
+
+.viewer { z-index: 20; font-family: "Times New Roman", Times, serif; font-weight: bold; }
+.viewer a { color: black; text-decoration: none; }
+.viewer a:hover { color: #9900ff; }
+
+
+/* ================= PROJECT COLUMN (computers) =================
+   On computers, a project opens in a white column under the music box,
+   and the rest of the page scoots over to make room. Phones stay full screen. */
+
+@media (min-width: 701px) {
+  body.panel-open .frame {
+    margin-right: var(--panel-w, 320px);     /* the grid + name card scoot left */
+  }
+
+  .viewer {
+    inset: auto;
+    top: var(--panel-top, 0px);
+    right: 0;
+    bottom: 0;
+    width: var(--panel-w, 320px);
+    border-left: 1px solid black;
+    --space: 30px;                   /* white space inside the column, same on every side */
+    z-index: 4;
+  }
+
+  .viewer .v-prev,
+  .viewer .v-next { font-size: 30px; }
+  .viewer .v-close { font-size: 26px; padding: 0 6px; }
+  .viewer .v-caption { padding: 12px var(--space) var(--space); }
+}
+
+
+/* ---- videos / stacked photos in the project column (TikTok Drafts, Gentleman) ---- */
+.viewer.has-videos .v-stage {
+  align-items: flex-start;
+  overflow-y: auto;                  /* scroll down through the videos / photos */
+  grid-column: 1 / -1;               /* full width, so the scroll bar sits at the right edge, under the × */
+  padding-left: var(--space);
+  padding-right: calc(var(--space) - 6px);   /* + the 6px scroll bar = same space as the left */
+  scrollbar-width: thin;             /* Firefox */
+  scrollbar-color: black transparent;
+}
+
+/* a thin black scroll bar that stays beside the images (Chrome, Safari) */
+.viewer.has-videos .v-stage::-webkit-scrollbar { width: 6px; }
+.viewer.has-videos .v-stage::-webkit-scrollbar-track { background: transparent; }
+.viewer.has-videos .v-stage::-webkit-scrollbar-thumb { background: black; border-radius: 0; }   /* rectangle */
+
+.v-videos {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  padding-bottom: 8px;
+}
+
+.v-videos[hidden] { display: none; }
+
+.v-videos video {
+  width: 100%;
+  max-height: 80vh;
+  background: black;
+}
+
+@media (max-width: 700px) {
+  .v-videos video { max-height: 70dvh; }
+}
+
+.v-videos figure {
+  margin: 0;
+}
+
+.v-videos figure img {
+  display: block;
+  width: 100%;
+}
+
+.v-videos figcaption {
+  margin-top: 7px;                   /* space between photo and its label */
+  font-size: var(--text);
+  text-align: center;
+}
+
+
+/* ================= THOUGHTS (bottom left corner, from Are.na) ================= */
+
+.thoughts {
+  position: absolute;
+  left: 0;
+  bottom: 0;                         /* tucked into the bottom left corner */
+  z-index: 3;
+  width: var(--panel-w, min(85vw, 20em));   /* same width as the music box */
+  max-height: 42dvh;                 /* scrolls inside if there are lots */
+  overflow-y: auto;
+  background: white;
+  border: 1px solid black;
+  font-family: "Times New Roman", Times, serif;
+  font-weight: bold;
+  font-size: var(--text);
+  line-height: 1.3;
+  color: black;
+}
+
+.thoughts[hidden] { display: none; }
+
+/* only on the homepage, not over the Work grid */
+body.show-work .thoughts { display: none; }
+
+.thought {
+  padding: 0.5em 0.7em;
+  border-bottom: 1px solid black;
+}
+
+.thought:last-child { border-bottom: none; }
+
+.thought-body p { margin: 0 0 0.4em; }
+.thought-body p:last-child { margin-bottom: 0; }
+
+.thought-body img,
+.thought-body video {
+  display: block;
+  margin: 0 auto;                    /* centered in the box */
+  max-width: 100%;
+  max-height: 12em;
+  border: 1px solid black;
+  cursor: pointer;
+}
+
+.thought-body audio { width: 100%; height: 32px; }
+
+.thought-body a { color: black; }
+.thought-body a:hover { color: #9900ff; }
+
+.thought-when {
+  margin-top: 0.25em;
+  font-weight: normal;
+  font-style: italic;
+  font-size: 0.75em;
+  color: #555;
+}
+
+/* phones: under the music box, below the picture */
+@media (max-width: 700px) {
+  .thoughts {
+    position: relative;
+    left: auto;
+    bottom: auto;
+    flex: none;
+    align-self: center;
+    width: calc(100% - 24px);
+    max-height: 22dvh;
+    margin: 0 auto 12px;
+    order: 3;
+  }
+}
+
+
+/* rainbow on hover for the Superstars Only link (same colors + motion as the magazine's site) */
+.info a.sso-link:hover,
+.info a.sso-link:focus-visible {
+  background: linear-gradient(90deg, #ff0000 0%, #00ffff 25%, #00ff00 50%, #ff00fb 75%, #ff0000 100%);
+  background-size: 400% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: sso-rainbow 7s linear infinite;   /* rainbow speed: bigger = slower */
+}
+
+@keyframes sso-rainbow {
+  from { background-position: 400% 50%; }
+  to   { background-position: 0% 50%; }
+}
+
+
+/* ================= ZOOM (big image to the left of the column) ================= */
+.zoom {
+  position: fixed;
+  z-index: 6;
+  top: 0;                            /* uses the full height, so the image sits higher */
+  bottom: 0;
+  left: 0;
+  right: var(--panel-w, 320px);      /* stops at the column, so the column stays visible */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  pointer-events: none;              /* the page behind stays visible and clickable around the image */
+}
+
+.zoom[hidden] { display: none; }
+
+/* the image and its × travel together, so the × always sits in the image's corner */
+.zoom-frame {
+  position: relative;
+  pointer-events: auto;
+  line-height: 0;
+}
+
+.zoom img {
+  display: block;
+  max-width: calc(100vw - var(--panel-w, 320px) - 80px);
+  max-height: calc(100vh - 200px);    /* leaves room for the hearts + focus underneath */
+  max-height: calc(100dvh - 200px);
+  object-fit: contain;
+}
+
+
+/* images in the column show they can be clicked */
+.viewer .v-stage img { cursor: zoom-in; }
+
+/* phones: the column is full screen, so the big image covers it on white */
+@media (max-width: 700px) {
+  .zoom {
+    top: 0;
+    right: 0;
+    z-index: 30;
+    background: white;
+    padding: 50px 14px 20px;
+    pointer-events: auto;
+  }
+  .zoom img {
+    max-width: calc(100vw - 28px);
+    max-height: calc(100dvh - 150px);
+  }
+}
+
+
+/* ================= MAKE A WISH (shooting star) =================
+   a dithered star + glowing tail (drawn dot by dot in wish.js) that flies in
+   from behind the music box (right) and across to the left. It sits just under
+   the music box (z-index 5 vs 6), so it comes out from behind it */
+.wish {
+  position: fixed;
+  z-index: 40;                       /* in front of everything, the music box + column too */
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 190px;                     /* the strip it flies through */
+  pointer-events: none;
+}
+.wish[hidden] { display: none; }
+
+.wish-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;        /* crisp square dots */
+}
+
+/* the star itself: crisp and solid (only the trail behind it is dithered) */
+.wish-star {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 90px;                       /* star size (change here) */
+  height: 90px;
+  will-change: transform;
+}
+
+/* wish granted: the star goes rainbow (the trail does too, in wish.js) */
+.wish.is-granted .wish-star-shape { fill: url(#wish-rainbow); }
+
+.wish-text {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-family: "Times New Roman", Times, serif;
+  font-weight: bold;
+  font-size: var(--text);
+  color: #002fff;
+  white-space: nowrap;
+  will-change: transform;
+}
+
+/* the star + message can be hovered / clicked (the rest of the strip lets clicks through) */
+.wish-star,
+.wish-text {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+
+
+/* ================= ARE.NA AUDIO PLAYER =================
+   a white rectangle with a black stroke (no rounded corners) */
+.th-audio {
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  margin-top: 0.3em;
+  padding: 0.35em 0.6em;
+  background: white;
+  border: 1px solid black;
+  border-radius: 0;
+}
+
+.th-play {
+  flex: none;
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  color: black;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.th-play:hover { color: #9900ff; }
+.th-play:focus { outline: none; }
+.th-play:focus-visible { outline: 1px dashed black; }
+
+.th-bar {
+  flex: 1;
+  height: 6px;
+  border: 1px solid black;
+  background: white;
+  cursor: pointer;
+}
+.th-fill {
+  height: 100%;
+  width: 0;
+  background: black;
+}
+
+.th-time {
+  flex: none;
+  font-size: 0.85em;
+  white-space: nowrap;
+}
+
+
+/* ================= RECENTLY PLAYED (dropdown under the music box) ================= */
+.np-recent {
+  position: fixed;                   /* placed under the music box by nowplaying.js */
+  z-index: 25;                       /* over the project column too */
+  box-sizing: border-box;
+  background: white;
+  border: 1px solid black;
+  font-family: "Times New Roman", Times, serif;
+  font-weight: bold;
+  font-size: var(--text);
+  line-height: 1.25;
+  color: black;
+  max-height: 60dvh;
+  overflow-y: auto;
+}
+.np-recent[hidden] { display: none; }
+
+.np-recent-head {
+  padding: 0.2em 0.6em;
+  border-bottom: 1px solid black;
+  text-align: center;
+}
+
+.np-recent-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.np-recent-list li {
+  padding: 0.45em 0.6em;
+  border-bottom: 1px solid black;
+}
+.np-recent-list li:last-child { border-bottom: 0; }
+
+.np-recent-artist { font-weight: normal; }
+.np-recent-when {
+  font-weight: normal;
+  font-style: italic;
+  font-size: 0.8em;
+  color: #555;
+}
+.np-recent-msg { font-weight: normal; font-style: italic; }
+
+
+/* ================= WORK MENU (top left corner) ================= */
+.work-menu {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 7;                        /* above the music box, so the list is never hidden under it */
+  width: min(85vw, 16em);            /* width of the menu (change here) */
+  font-family: "Times New Roman", Times, serif;
+  font-weight: bold;
+  font-size: var(--text);
+  line-height: 1.25;
+  color: black;
+}
+
+.work-menu-btn {
+  display: block;
+  padding: 0.25em 0.6em;
+  border: 1px solid black;
+  background: white;
+  font: inherit;
+  color: black;
+  cursor: pointer;
+  text-align: left;
+}
+.work-menu-btn:hover { background: #ff69be; }   /* same pink as the old Work page */
+.work-menu-btn:focus { outline: none; }
+.work-menu-btn:focus-visible { outline: 1px dashed black; outline-offset: -4px; }
+
+.work-menu-list {
+  list-style: none;
+  margin: -1px 0 0;                  /* shares the button's bottom line */
+  padding: 0;
+  background: white;
+  border: 1px solid black;
+  max-height: calc(100dvh - 8em);    /* scrolls if it's longer than the window */
+  overflow-y: auto;
+}
+.work-menu-list[hidden] { display: none; }
+
+.work-menu-list li { border-bottom: 1px solid black; }
+.work-menu-list li:last-child { border-bottom: 0; }
+
+.work-menu-list button {
+  display: block;
+  width: 100%;
+  padding: 0.4em 0.6em;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 1em;
+  color: black;
+  text-align: left;
+  cursor: pointer;
+}
+.work-menu-list button:hover { background: #ff69be; }
+.work-menu-list button.is-current { background: #e1ff00; }
+.work-menu-list button:focus { outline: none; }
+.work-menu-list button:focus-visible { outline: 1px dashed black; outline-offset: -3px; }
+
+.wm-year {
+  font-weight: normal;
+  font-style: italic;
+  font-size: 0.85em;
+  color: #555;
+}
+
+/* phones */
+@media (max-width: 700px) {
+}
+
+
+/* ================= HEARTS under the big image (flip through the column) ================= */
+.zoom-nav {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  margin-top: 14px;
+}
+.zoom-nav[hidden] { display: none; }
+
+.zoom-heart {
+  width: 48px;                       /* heart size (change here) */
+  height: 53px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+.zoom-heart svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.zoom-heart .h { fill: white; stroke: black; stroke-width: 1px; vector-effect: non-scaling-stroke; stroke-linejoin: round; }   /* 1px, like the rest of the site */
+.zoom-heart .a { fill: black; }
+.zoom-prev svg .a { transform: scaleX(-1); transform-origin: 50px 52px; }   /* arrow points left */
+.zoom-heart:hover .h { fill: #ff69be; }                                        /* fills pink on hover */
+.zoom-heart:focus { outline: none; }
+.zoom-heart:focus-visible { outline: 1px dashed black; outline-offset: 2px; }
+
+
+/* ================= FOCUS (white behind the big image) ================= */
+.zoom-focus {
+  display: block;
+  margin: 12px auto 0;
+  padding: 0.25em 0.6em;
+  border: 1px solid black;
+  background: white;
+  font-family: "Times New Roman", Times, serif;
+  font-weight: bold;
+  font-size: var(--text);
+  line-height: 1.25;
+  color: black;
+  cursor: pointer;
+}
+.zoom-focus:hover { background: #ff69be; }
+.zoom-focus:focus { outline: none; }
+.zoom-focus:focus-visible { outline: 1px dashed black; outline-offset: 2px; }
+
+/* focus on: everything left of the column turns white (portrait, Are.na, Work menu are covered) */
+.zoom.is-focus {
+  background: white;
+  pointer-events: auto;              /* clicking the white still closes the big image */
+}
+
+/* phones: the big image is already on plain white, so no focus button */
+@media (max-width: 700px) {
+  .zoom-focus { display: none; }
+}
+
+/* focus button text: always black */
+.zoom-focus,
+.zoom-focus:hover,
+.zoom-focus:active,
+.zoom-focus:focus {
+  color: black !important;
+  -webkit-text-fill-color: black;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+
+/* ================= hearts + focus stay put (they don't move with the image size) ================= */
+.zoom {
+  padding-bottom: 150px;             /* the image is centered in the space above the controls */
+}
+.zoom img {
+  max-height: calc(100vh - 190px);
+  max-height: calc(100dvh - 190px);
+}
+.zoom-frame {
+  position: static;
+  pointer-events: none;
+}
+.zoom-frame img,
+.zoom-heart,
+.zoom-focus { pointer-events: auto; }
+
+.zoom-nav {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 78px;                      /* hearts: always this far from the bottom */
+  margin: 0;
+  pointer-events: none;
+}
+.zoom-focus {
+  position: absolute;
+  left: 50%;
+  bottom: 30px;                      /* focus button: always this far from the bottom */
+  transform: translateX(-50%);
+  margin: 0;
+}
+
+@media (max-width: 700px) {
+  .zoom { padding-bottom: 110px; }
+  .zoom img {
+    max-height: calc(100vh - 170px);
+    max-height: calc(100dvh - 170px);
+  }
+  .zoom-nav { bottom: 34px; }
+}
+
+
+/* ================= MAGIC 8 BALL (bottom right corner) ================= */
+.eight {
+  position: absolute;
+  right: 0;
+  bottom: 0;                         /* tucked into the bottom right corner */
+  z-index: 3;
+  width: 11em;
+  background: white;
+  border: 1px solid black;
+  font-family: "Times New Roman", Times, serif;
+  font-weight: bold;
+  font-size: var(--text);
+  line-height: 1.25;
+  color: black;
+  text-align: center;
+}
+
+/* hidden while a work is open in the column (the column runs down this side) */
+body.panel-open .eight { display: none; }
+
+.eight-head {
+  padding: 0.2em 0.5em;
+  border-bottom: 1px solid black;
+}
+
+.eight-body { padding: 0.8em 0.6em 0.6em; }
+
+.eight-ball {
+  position: relative;
+  display: block;
+  width: 7.5em;                      /* ball size (change here) */
+  height: 7.5em;
+  margin: 0 auto;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 28%, #5a5a5a 0%, #1c1c1c 28%, #000 70%);
+  cursor: pointer;
+  font: inherit;
+}
+.eight-ball:focus { outline: none; }
+.eight-ball:focus-visible { outline: 1px dashed black; outline-offset: 4px; }
+
+/* the white "8" circle */
+.eight-face,
+.eight-window {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 46%;
+  height: 46%;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.3s ease;
+}
+.eight-face {
+  background: white;
+  color: black;
+  font-size: 1.7em;
+}
+
+/* the answer window: dark blue, white text */
+.eight-window {
+  width: 58%;
+  height: 58%;
+  padding: 0.3em;
+  box-sizing: border-box;
+  background: radial-gradient(circle, #1b2a8c 0%, #0b1250 100%);
+  color: white;
+  font-size: 0.62em;
+  line-height: 1.15;
+  text-align: center;
+  opacity: 0;
+}
+.eight-ball.is-answer .eight-face { opacity: 0; }
+.eight-ball.is-answer .eight-window { opacity: 1; }
+
+/* shake */
+.eight-ball.is-shaking { animation: eight-shake 0.9s ease-in-out; }
+@keyframes eight-shake {
+  0%, 100% { transform: translate(0, 0) rotate(0); }
+  15% { transform: translate(-6px, 2px) rotate(-10deg); }
+  30% { transform: translate(6px, -2px) rotate(9deg); }
+  45% { transform: translate(-5px, 1px) rotate(-7deg); }
+  60% { transform: translate(5px, -1px) rotate(6deg); }
+  75% { transform: translate(-3px, 0) rotate(-3deg); }
+}
+
+.eight-hint {
+  margin-top: 0.6em;
+  font-weight: normal;
+  font-style: italic;
+  font-size: 0.8em;
+  color: #555;
+}
+
+/* phones: below the Are.na box */
+@media (max-width: 700px) {
+  .eight {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    flex: none;
+    align-self: center;
+    width: calc(100% - 24px);
+    margin: 0 auto 12px;
+    order: 4;
+  }
+}
+
+
+/* ================= DROP PILE (bottom right corner) ================= */
+.drops {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  width: min(440px, 32vw);           /* how far the pile can spread (change here) */
+  height: min(340px, 42dvh);
+  pointer-events: none;              /* only the button + choices are clickable */
+  font-family: "Times New Roman", Times, serif;
+  font-weight: bold;
+  font-size: var(--text);
+  line-height: 1.25;
+  color: black;
+}
+body.panel-open .drops { display: none; }   /* the column runs down this side */
+
+.drops-pile {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  transition: opacity 0.6s ease;
+}
+.drops-pile.is-clearing { opacity: 0; }
+.drops-pile.is-target { background: rgba(255, 105, 190, 0.2); }    /* the Work-hover pink (#ff69be), see-through, while dragging */
+
+/* the emoji following your finger / mouse while dragging */
+.drop-ghost {
+  position: fixed;
+  z-index: 50;
+  line-height: 1;
+  pointer-events: none;
+}
+
+/* a dragged emoji pops into place */
+.drop.is-plop { animation: drop-plop 0.35s ease-out both; }
+@keyframes drop-plop {
+  0%   { transform: scale(1.5) rotate(var(--rot, 0deg)); }
+  100% { transform: scale(1)   rotate(var(--rot, 0deg)); }
+}
+.drops-choices button { touch-action: none; }   /* phones: drag instead of scrolling the page */
+
+.drop {
+  position: absolute;
+  line-height: 1;
+  transform: rotate(var(--rot, 0deg));
+  user-select: none;
+}
+.drop.is-falling { animation: drop-fall 0.9s cubic-bezier(.45, 0, .7, 1) both; }
+@keyframes drop-fall {
+  0%   { transform: translateY(-110vh) rotate(0deg); }
+  80%  { transform: translateY(0) rotate(var(--rot, 0deg)); }
+  90%  { transform: translateY(-8px) rotate(var(--rot, 0deg)); }
+  100% { transform: translateY(0) rotate(var(--rot, 0deg)); }
+}
+
+/* the button in the corner */
+.drops-btn {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  padding: 0.25em 0.6em;
+  border: 1px solid black;
+  background: white;
+  font: inherit;
+  color: black;
+  cursor: pointer;
+  pointer-events: auto;
+  white-space: nowrap;
+}
+.drops-btn:hover { background: #ff69be; }
+.drops-btn:focus { outline: none; }
+.drops-btn:focus-visible { outline: 1px dashed black; outline-offset: -4px; }
+
+/* the emoji choices pop up above the button */
+.drops-picker {
+  position: absolute;
+  right: 0;
+  bottom: calc(1.25em + 0.5em + 1px);   /* sits on top of the button */
+  z-index: 1;
+  width: 17em;
+  background: white;
+  border: 1px solid black;
+  pointer-events: auto;
+}
+.drops-picker[hidden] { display: none; }
+.drops-picker { transition: opacity 0.2s ease; }
+/* while dragging an emoji: the box fades almost away so you can see + use the whole corner */
+.drops.is-dragging .drops-picker { opacity: 0.12; }
+.drops.is-dragging .drops-picker * { pointer-events: none; }
+.drops-picker-head {
+  padding: 0.2em 0.5em;
+  border-bottom: 1px solid black;
+  text-align: center;
+}
+.drops-choices {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  padding: 0.3em;
+  max-height: 14em;                  /* scrolls if there are lots */
+  overflow-y: auto;
+}
+.drops-choices button {
+  padding: 0.15em 0;
+  border: 0;
+  background: none;
+  font-size: 1.25em;
+  line-height: 1.2;
+  cursor: pointer;
+}
+.drops-choices button:hover { background: #ff69be; }
+.drops-choices button:focus { outline: none; }
+.drops-choices button:focus-visible { outline: 1px dashed black; }
+
+/* phones: its own little corner below the Are.na box */
+@media (max-width: 700px) {
+  .drops {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    flex: none;
+    align-self: center;
+    width: calc(100% - 24px);
+    height: 200px;
+    margin: 0 auto 12px;
+    order: 4;
+  }
+}
+
+
+/* ================= YOUTUBE FILM in the column (Finding Lana) ================= */
+.v-youtube {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: black;
+}
+.v-youtube iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+.v-videos.is-film {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;           /* the film sits in the middle of the column */
+}
+
+
+/* ================= VIDEOS (gif previews in the column) ================= */
+.v-videos .gif-link {
+  font-weight: normal;
+  font-size: 0.85em;
+  color: black;
+  text-decoration: none;
+}
+.v-videos .gif-link:hover { color: #9900ff; }
+
+/* the looping videos act like gifs: click to see big */
+.viewer .v-stage video.gif-loop { cursor: zoom-in; }
+#zoom-vid[hidden], #zoom-img[hidden] { display: none; }
+.zoom #zoom-vid {
+  display: block;
+  pointer-events: auto;
+  max-width: calc(100vw - var(--panel-w, 320px) - 80px);
+  max-height: calc(100vh - 190px);
+  max-height: calc(100dvh - 190px);
+  object-fit: contain;
+}
+@media (max-width: 700px) {
+  .zoom #zoom-vid { max-width: calc(100vw - 28px); max-height: calc(100dvh - 170px); }
+}
+
+/* no "N photos / pages / videos" count under the column title */
+.v-count { display: none; }
+
+/* fix: keep the (empty) zoom video out of the way when a photo is showing */
+.zoom #zoom-vid[hidden],
+.zoom #zoom-img[hidden] { display: none; }
+
+
+/* ================= 11:11 (over everything) ================= */
+.elevens {
+  position: fixed;
+  inset: 0;
+  z-index: 100;                      /* in front of everything */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.elevens[hidden] { display: none; }
+
+.elevens-big {
+  font-family: "Times New Roman", Times, serif;
+  font-weight: bold;
+  font-size: min(36vw, 70dvh);       /* takes up the screen */
+  line-height: 1;
+  color: #ff69be;                    /* the Work pink */
+  -webkit-text-stroke: 6px black;    /* black stroke (change the thickness here) */
+  paint-order: stroke fill;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.elevens-note {
+  margin-top: 0.4em;                 /* right under the big 11:11 */
+  padding: 0.25em 0.7em;
+  background: white;                 /* in a little box so it's readable over anything */
+  border: 1px solid black;
+  text-align: center;
+  font-family: "Times New Roman", Times, serif;
+  font-weight: bold;
+  font-size: var(--text);
+  color: black;
+}
+
+/* ================= PHONES: the page scrolls =================
+   First screen: the portrait (with Click Here + the name card) and the music box.
+   Scroll down: the Are.na thoughts, then the Say Hi! pile at the very bottom. */
+@media (max-width: 700px) {
+  html, body {
+    height: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+  .stage {
+    position: relative;
+    inset: auto;
+    min-height: 100dvh;
+    overflow: visible;
+  }
+  .frame {
+    flex: none;
+    height: 74dvh;                   /* the portrait area on the first screen (change here) */
+  }
+  .thoughts { max-height: 45dvh; }
+  .drops {
+    height: 170px;                   /* a small corner for Say Hi! at the bottom of the page */
+    margin-top: 6px;
+    margin-bottom: max(12px, env(safe-area-inset-bottom));
+  }
+}
+
+
+/* ================= WATCH (top left, next to Work) ================= */
+.watch {
+  position: absolute;
+  top: 0;
+  left: 60px;                        /* set by watch.js to sit right next to Work */
+  z-index: 7;
+  font-family: "Times New Roman", Times, serif;
+  font-weight: bold;
+  font-size: var(--text);
+  line-height: 1.25;
+  color: black;
+}
+.watch-btn {
+  display: block;
+  padding: 0.25em 0.6em;
+  border: 1px solid black;
+  background: white;
+  font: inherit;
+  color: black;
+  cursor: pointer;
+}
+.watch-btn:hover { background: #ff69be; }
+.watch-btn:focus { outline: none; }
+.watch-btn:focus-visible { outline: 1px dashed black; outline-offset: -4px; }
+
+.watch-box {
+  margin-top: -1px;                  /* shares the button's bottom line */
+  background: white;
+  border: 1px solid black;
+  --watch-h: min(62dvh, 560px);      /* how tall the TV is (change here) */
+}
+.watch-box[hidden] { display: none; }
+
+/* the feed: one vertical video fills the box; scroll/swipe snaps to the next */
+.watch-feed {
+  width: calc(var(--watch-h) * 9 / 16);
+  height: var(--watch-h);
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  overscroll-behavior: contain;
+  background: black;
+  scrollbar-width: none;
+}
+.watch-feed::-webkit-scrollbar { display: none; }
+.watch-slide {
+  height: 100%;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;          /* one video per swipe */
+}
+.watch-slide video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+.watch-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6em;
+  border-top: 1px solid black;
+  padding: 0.25em 0.5em;
+  font-size: 0.85em;
+}
+.watch-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.watch-sound {
+  flex: none;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: black;
+  cursor: pointer;
+}
+.watch-sound:hover { color: #9900ff; }
+
+@media (max-width: 700px) {
+  .watch-box { --watch-h: min(68dvh, calc((100vw - 90px) * 16 / 9)); }
+}
+
+/* Watch: hearts to go back / next, around the label */
+.watch-bar { justify-content: space-between; }
+.watch-heart { width: 26px; height: 29px; flex: none; }
+.watch-label { flex: 1; text-align: center; }
+.watch-bar2 { justify-content: center; padding-top: 0.15em; }
+
+/* no blue box around Click Here after clicking it (keyboard users still get an outline) */
+.click-here:focus { outline: none; }
+.click-here:focus-visible { outline: 1px dashed currentColor; }
+
+
+/* ================= THE BEAR (on the last portrait you click through to) ================= */
+.bear-note {
+  position: absolute;
+  z-index: 3;
+  /* just below-left of the music box, on a diagonal from its corner */
+  right: calc(var(--panel-w, 320px) - 10px);
+  top: calc(var(--panel-top, 120px) + 14px);
+  width: min(20cqh, 24vw);           /* bear size (change here) */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+}
+.bear-note[hidden] { display: none; }
+.bear-svg { display: block; width: 100%; height: auto; }
+.bear-text {
+  width: max-content;                /* the note can be wider than the (smaller) bear */
+  max-width: 17em;
+  margin-top: 0.3em;
+  padding: 0.25em 0.6em;
+  background: white;
+  border: 1px solid black;
+  font-family: "Times New Roman", Times, serif;
+  font-weight: bold;
+  font-size: var(--text);
+  line-height: 1.25;
+  text-align: center;
+  color: black;
+}
+@keyframes bear-pop {
+  0%   { transform: scale(0.3); opacity: 0; }
+  100% { transform: scale(1);   opacity: 1; }
+}
+@media (max-width: 700px) {
+  .bear-note { left: auto; right: 3%; width: 28vw; top: calc(var(--anchor-y) * 1% + 1cqh); align-items: flex-end; }
+  .bear-text { max-width: 14em; }
+}
+
+/* the bear can be clicked: its heart turns pink (keeps the black outline) */
+.bear-svg { pointer-events: auto; cursor: pointer; }
+.bear-note.is-loved .bear-heart { fill: #ff69be; }   /* the Work pink */
+.bear-svg:hover .bear-heart { fill: #ff69be; }   /* hovering over the bear turns the heart pink too */
+
+
+/* ================= PEEKABOO (pops up from behind the Are.na box) ================= */
+.peek {
+  position: absolute;                /* placed by peek.js; no z-index here, so his parts can go behind / in front of the box */
+  pointer-events: none;
+}
+.peek[hidden] { display: none; }
+.peek-back {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  overflow: hidden;                  /* hides whatever of him is below the box's top edge */
+  z-index: 2;                        /* behind the Are.na box (3) */
+}
+.peek-nose {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  overflow: hidden;
+  z-index: 4;                        /* in front of the box, like his hands */
+}
+.peek-svg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: auto;
+}
+.peek-back .peek-svg,
+.peek-nose .peek-svg {
+  transform: translateY(100%);       /* starts hidden behind the box... */
+  transition: transform 0.6s ease-out 0.2s;   /* a smooth slide, no bounce — starts just after his hands appear */
+  will-change: transform;            /* keeps the slide smooth (no jitter) */
+}
+.peek.is-up .peek-back .peek-svg,
+.peek.is-up .peek-nose .peek-svg { transform: translateY(0); }   /* face + nose slide up together */
+.peek:not(.is-up) .peek-back .peek-svg,
+.peek:not(.is-up) .peek-nose .peek-svg { transition-delay: 0s; }
+.peek-front {
+  z-index: 4;                        /* hands + nose in front of the box */
+  visibility: hidden;                /* no fade: the hands + nose just appear / disappear */
+  transition: visibility 0s 0.6s;    /* when he leaves, they stay until his head has slid down */
+}
+.peek.is-up .peek-front { visibility: visible; transition: none; }   /* his hands appear first, then his face (with the nose) slides up */
+
+/* his eyes look around: left... back... right... back */
+.peek.is-up .peek-pupil { animation: peek-look 4s ease-in-out 0.8s infinite; }
+@keyframes peek-look {
+  0%, 15%   { transform: translateX(0); }
+  30%, 50%  { transform: translateX(-66px); }   /* mirror image of where they rest: the white shows on the other side */
+  65%, 100% { transform: translateX(0); }
+}
+
+/* phones: the music box sits right above the Are.na box, so he pops up in front of it instead of behind it */
+@media (max-width: 700px) {
+  .peek-back { z-index: 7; }
+  .peek-front, .peek-nose { z-index: 8; }
+}
+
+/* the yellow guy: hover or click him and "I dream of you always." appears above him */
+.peek-front .peek-hand,
+.peek-back .peek-svg { pointer-events: none; }
+.peek-hit {
+  position: absolute;
+  left: 15%;
+  right: 15%;
+  top: 0;
+  pointer-events: auto;              /* an invisible area over him to hover / click */
+  cursor: pointer;
+  z-index: 5;
+}
+.peek-dream {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 0.3em;
+  padding: 0.25em 0.6em;
+  background: white;
+  border: 1px solid black;
+  font-family: "Times New Roman", Times, serif;
+  font-weight: bold;
+  font-size: var(--text);
+  line-height: 1.25;
+  color: black;
+  white-space: nowrap;
+  z-index: 5;
+}
+.peek-dream[hidden] { display: none; }
+@media (max-width: 700px) { .peek-hit, .peek-dream { z-index: 9; } }
+
+
+/* ================= THE LETTER BEAR (above the Say Hi! emoji box) ================= */
+.letter-bear {
+  position: absolute;
+  right: 3em;                        /* distance from the right edge (change here) */
+  bottom: 3em;                       /* set by drops.js to sit on top of the emoji box */
+  width: 170px;                      /* his size (change here) */
+  z-index: 2;
+  pointer-events: none;
+}
+.letter-bear[hidden] { display: none; }
+.letter-svg { display: block; width: 100%; height: auto; pointer-events: auto; cursor: pointer; }
+
+/* hovering (or tapping) him: the heart cracks in three steps, top to bottom. Moving away mends it. */
+.letter-svg .heart-crack { visibility: hidden; }
+.letter-bear:hover .crack-1, .letter-bear.is-open .crack-1 { visibility: visible; }
+.letter-bear:hover .crack-2, .letter-bear.is-open .crack-2 { animation: crack-show 0s .35s forwards; }   /* .35s = pause between the two cracks */
+.letter-bear:hover .crack-3, .letter-bear.is-open .crack-3 { animation: crack-show 0s .7s forwards; }    /* the third crack, down to the tip */
+@keyframes crack-show { to { visibility: visible; } }
+.letter-bear:hover .letter-pupil, .letter-bear.is-open .letter-pupil { transform: translateX(-33px); }   /* his eyes look the other way while the heart breaks */
+.letter-text {                       /* "Let’s talk more." above him, same note box as the other bears */
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);       /* centered above him */
+  margin: 0 0 0.3em;
+  padding: 0.25em 0.6em;
+  background: white;
+  border: 1px solid black;
+  font-family: "Times New Roman", Times, serif;
+  font-weight: bold;
+  font-size: var(--text);
+  line-height: 1.25;
+  color: black;
+  white-space: nowrap;
+}
+
+/* phones: the emoji box opens upward over the Are.na box, so it has to sit on top of it */
+@media (max-width: 700px) { .drops { z-index: 4; } }
+
+/* "Made in collaboration with …" sits on one line of its own under the details */
+.v-credit { white-space: nowrap; }
+
+
+/* ================= THE LEOPARD (rises up from behind the name card) ================= */
+.leopard {
+  position: absolute;                /* placed by leopard.js, sitting right on top of the name card */
+  width: 150px;                      /* his size (change here) */
+  z-index: 30;
+  transform: translateX(-50%);
+  clip-path: inset(-100vh -100vw 0 -100vw);   /* hides him below the top of the name card while he rises */
+  pointer-events: none;
+}
+.leo-inner { position: relative; transform: translateY(110%); transition: transform .6s ease-out; }
+.leopard.is-up .leo-inner { transform: translateY(0); }
+.leopard[hidden] { display: none; }
+.leo-svg circle, .leo-svg ellipse, .leo-svg polygon, .leo-svg rect, .leo-svg path { vector-effect: non-scaling-stroke; }   /* every outline stays a thin 1px line */
+.leo-svg { display: block; width: 100%; height: auto; }
+.leo-text {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0 0 0.3em;
+  padding: 0.25em 0.6em;
+  background: white;
+  border: 1px solid black;
+  font-family: "Times New Roman", Times, serif;
+  font-weight: bold;
+  font-size: var(--text);
+  line-height: 1.25;
+  color: black;
+  white-space: nowrap;
+}
+@media (max-width: 700px) { .leopard { width: 120px; } }
+
+/* hover the leopard: his spots turn Work pink and the stars go rainbow (like "Wish granted!") */
+.leo-svg { pointer-events: auto; cursor: pointer; }
+.leopard:hover .leo-spots, .leopard.is-hover .leo-spots { fill: #ff69be; }
+.leopard:hover .leo-star, .leopard.is-hover .leo-star { fill: url(#leo-rainbow); }
+

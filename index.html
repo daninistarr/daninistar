@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daniela Rodriguez</title>
+  <link rel="stylesheet" href="home.css?v=100">
+</head>
+<body>
+
+  <main class="stage">
+    <!-- the picture area: portrait, "Click Here" and contact info -->
+    <div class="frame">
+
+    <!-- the portrait moves so its eyes land under "Click Here" (positions are in home.js) -->
+    <img id="portrait" class="portrait" alt="">
+
+    <!-- "Click Here" never moves -->
+    <a href="#" class="click-here" id="click-here">Click Here</a>
+
+    <!-- WORK: every project, shown in place of the portraits (built by work.js from work-data.js) -->
+    <section class="work" id="work" hidden>
+      <div class="grid" id="grid"></div>
+    </section>
+
+    <!-- the bear: shows up only on the portrait marked "bear" in home.js (a reward for clicking through) -->
+    <div class="bear-note" id="bear-note" hidden>
+      <svg class="bear-svg" viewBox="70 85 740 665" aria-hidden="true">
+        <ellipse cx="406" cy="245" rx="128" ry="152" fill="#a86648" stroke="#000" stroke-width="1" vector-effect="non-scaling-stroke"/>
+        <ellipse cx="671" cy="246" rx="128" ry="152" fill="#a86648" stroke="#000" stroke-width="1" vector-effect="non-scaling-stroke"/>
+        <ellipse cx="536" cy="458" rx="209" ry="228" fill="#a86648" stroke="#000" stroke-width="1" vector-effect="non-scaling-stroke"/>
+        <ellipse cx="192" cy="584" rx="112" ry="91" fill="#a86648" stroke="#000" stroke-width="1" vector-effect="non-scaling-stroke"/>
+        <path class="bear-heart" transform="translate(131.6 283.5) scale(3.0682)" d="M50 104C50 104 7 70 6 33C5.5 16 17 7 29 7C40 7 47 14 50 22C53 14 60 7 71 7C83 7 94.5 16 94 33C93 70 50 104 50 104Z" fill="#000" stroke="#000" stroke-width="1" vector-effect="non-scaling-stroke"/>
+        <ellipse cx="318" cy="644" rx="106" ry="94" fill="#a86648" stroke="#000" stroke-width="1" vector-effect="non-scaling-stroke"/>
+        <ellipse cx="486" cy="410" rx="31" ry="30" fill="#fff" stroke="#000" stroke-width="1" vector-effect="non-scaling-stroke"/>
+        <ellipse cx="460.5" cy="411.5" rx="27" ry="26" fill="#000"/>
+        <ellipse cx="600" cy="410" rx="31" ry="30" fill="#fff" stroke="#000" stroke-width="1" vector-effect="non-scaling-stroke"/>
+        <ellipse cx="574" cy="411.5" rx="27" ry="26" fill="#000"/>
+        <ellipse cx="536" cy="594" rx="31" ry="30" fill="#ff0099" stroke="#000" stroke-width="1" vector-effect="non-scaling-stroke"/>
+      </svg>
+      <div class="bear-text">Wow you&rsquo;re really taking the time to get to know me. &lt;3</div>
+    </div>
+
+    <div class="info">
+      <!-- hover: "Danini Star" appears over the name in shimmering gold; click: back to the homepage -->
+      <a href="#" class="name-swap" title="Home"><span class="name-real">Daniela Rodriguez</span><span class="name-star" aria-hidden="true"><span class="star-shadow">Danini Star</span><span class="star-gold">Danini Star</span></span></a><br>
+      <span class="big-apple" tabindex="0">New York, NY</span><br>
+      <a href="https://www.instagram.com/danini_star/" target="_blank" rel="noopener">Social Media</a><br>
+      <a href="mailto:daniela.r0008@gmail.com">daniela.r0008@gmail.com</a><br>
+      <a href="https://www.superstarsonlymag.com" target="_blank" rel="noopener" class="sso-link">www.superstarsonlymag.com</a>
+    </div>
+
+    </div><!-- /frame -->
+
+    <!-- WORK MENU (top left corner): click "Work" and the list of works drops down;
+         click a work and it opens in the white column on the right (work.js) -->
+    <nav class="work-menu" id="work-menu">
+      <button type="button" class="work-menu-btn" id="work-menu-btn" aria-expanded="false">Work</button>
+      <ol class="work-menu-list" id="work-menu-list" hidden></ol>
+    </nav>
+
+    <!-- WATCH (top left, next to Work): a little TV with a vertical video feed (watch.js) -->
+    <nav class="watch" id="watch">
+      <button type="button" class="watch-btn" id="watch-btn">Watch</button>
+      <div class="watch-box" id="watch-box" hidden>
+        <div class="watch-feed" id="watch-feed"></div>
+        <div class="watch-bar">
+          <button type="button" class="zoom-heart zoom-prev watch-heart" id="watch-prev" aria-label="Previous video"><svg viewBox="0 0 100 110" aria-hidden="true"><path class="h" d="M50 104C50 104 7 70 6 33C5.5 16 17 7 29 7C40 7 47 14 50 22C53 14 60 7 71 7C83 7 94.5 16 94 33C93 70 50 104 50 104Z"/><path class="a" d="M30.5 46H52.5V38L69.5 52L52.5 66V58H30.5Z"/></svg></button>
+          <span class="watch-label" id="watch-label"></span>
+          <button type="button" class="zoom-heart zoom-next watch-heart" id="watch-next" aria-label="Next video"><svg viewBox="0 0 100 110" aria-hidden="true"><path class="h" d="M50 104C50 104 7 70 6 33C5.5 16 17 7 29 7C40 7 47 14 50 22C53 14 60 7 71 7C83 7 94.5 16 94 33C93 70 50 104 50 104Z"/><path class="a" d="M30.5 46H52.5V38L69.5 52L52.5 66V58H30.5Z"/></svg></button>
+        </div>
+        <div class="watch-bar watch-bar2">
+          <button type="button" class="watch-sound" id="watch-sound">Sound: On</button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- THOUGHTS (bottom left corner): what's in the Are.na channel, newest on top — filled in by thoughts.js -->
+    <aside class="thoughts" id="thoughts" hidden></aside>
+
+
+    <!-- DROP PILE (bottom right corner): visitors drop an emoji and it lands on a pile everyone shares (drops.js) -->
+    <aside class="drops" id="drops">
+      <div class="drops-pile" id="drops-pile" aria-hidden="true"></div>
+      <div class="drops-picker" id="drops-picker" hidden>
+        <div class="drops-picker-head">Drag and Drop</div>
+        <div class="drops-choices" id="drops-choices"></div>
+      </div>
+      <!-- a little bear with a love letter: shows up after this visitor leaves 3 emojis (drops.js) -->
+      <div class="letter-bear" id="letter-bear" hidden>
+        <p class="letter-text">Let’s talk more.</p>
+        <svg class="letter-svg" viewBox="80 95 760 640" aria-hidden="true">
+          <circle cx="335" cy="190" r="74" fill="#6cffe0" stroke="#000" stroke-width="1" vector-effect="non-scaling-stroke"/>
+          <circle cx="581" cy="190" r="74" fill="#6cffe0" stroke="#000" stroke-width="1" vector-effect="non-scaling-stroke"/>
+          <ellipse cx="452.5" cy="330" rx="164.5" ry="182" fill="#6cffe0" stroke="#000" stroke-width="1" vector-effect="non-scaling-stroke"/>
+          <circle cx="390.5" cy="287" r="35" fill="#fff" stroke="#000" stroke-width="1" vector-effect="non-scaling-stroke"/>
+          <circle class="letter-pupil" cx="407" cy="287" r="29.5" fill="#000"/>
+          <circle cx="513.5" cy="287" r="35" fill="#fff" stroke="#000" stroke-width="1" vector-effect="non-scaling-stroke"/>
+          <circle class="letter-pupil" cx="530" cy="287" r="29.5" fill="#000"/>
+          <rect x="166" y="388" width="583" height="337" fill="#fff" stroke="#000" stroke-width="1" vector-effect="non-scaling-stroke"/>
+          <polyline class="flap-shut" points="167,389 457,642 748,389" fill="none" stroke="#000" stroke-width="1" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
+          <g class="letter-heart"><path transform="translate(342.4 477.2) scale(2.2614)" d="M50 104C50 104 7 70 6 33C5.5 16 17 7 29 7C40 7 47 14 50 22C53 14 60 7 71 7C83 7 94.5 16 94 33C93 70 50 104 50 104Z" fill="#ff69be" stroke="#000" stroke-width="1" vector-effect="non-scaling-stroke"/><polyline class="heart-crack crack-1" transform="translate(342.4 477.2) scale(2.2614)" points="49,20 37.5,51" fill="none" stroke="#000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><polyline class="heart-crack crack-2" transform="translate(342.4 477.2) scale(2.2614)" points="37.5,51 54,74" fill="none" stroke="#000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><polyline class="heart-crack crack-3" transform="translate(342.4 477.2) scale(2.2614)" points="54,74 50,103" fill="none" stroke="#000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></g>
+          <circle cx="452.5" cy="386" r="31" fill="#ac795a" stroke="#000" stroke-width="1" vector-effect="non-scaling-stroke"/>
+          <ellipse cx="186" cy="581" rx="96" ry="105" fill="#6cffe0" stroke="#000" stroke-width="1" vector-effect="non-scaling-stroke"/>
+          <ellipse cx="730" cy="581" rx="96" ry="105" fill="#6cffe0" stroke="#000" stroke-width="1" vector-effect="non-scaling-stroke"/>
+        </svg>
+      </div>
+      <button type="button" class="drops-btn" id="drops-btn" aria-expanded="false">Say Hi!</button>
+    </aside>
+
+    <!-- PEEKABOO: a little yellow guy pops up from behind the Are.na box when someone finishes one of its audios (peek.js).
+         His head is behind the box; his hands + nose are in front of it. -->
+    <div class="peek" id="peek" hidden>
+      <div class="peek-dream" id="peek-dream" hidden>I dream of you always.</div>
+      <div class="peek-back">
+        <svg class="peek-svg" viewBox="150 20 910 1130" aria-hidden="true">
+          <ellipse cx="457" cy="190" rx="157" ry="160" fill="#f8ff5d" stroke="#000" stroke-width="1" vector-effect="non-scaling-stroke"/>
+          <ellipse cx="768" cy="190" rx="157" ry="160" fill="#f8ff5d" stroke="#000" stroke-width="1" vector-effect="non-scaling-stroke"/>
+          <ellipse cx="463" cy="198" rx="95" ry="102" fill="#ffabc7" stroke="#000" stroke-width="1" vector-effect="non-scaling-stroke"/>
+          <ellipse cx="773" cy="198" rx="95" ry="102" fill="#ffabc7" stroke="#000" stroke-width="1" vector-effect="non-scaling-stroke"/>
+          <ellipse cx="607" cy="578" rx="337" ry="357" fill="#f8ff5d" stroke="#000" stroke-width="1" vector-effect="non-scaling-stroke"/>
+          <ellipse cx="470" cy="530" rx="70" ry="68" fill="#fff" stroke="#000" stroke-width="1" vector-effect="non-scaling-stroke"/>
+          <circle class="peek-pupil" cx="503" cy="529" r="59" fill="#000"/>
+          <ellipse cx="725" cy="530" rx="70" ry="68" fill="#fff" stroke="#000" stroke-width="1" vector-effect="non-scaling-stroke"/>
+          <circle class="peek-pupil" cx="758" cy="529" r="59" fill="#000"/>
+        </svg>
+      </div>
+      <!-- his nose slides up with his face (it sits over the box's edge, so it has its own layer in front) -->
+      <div class="peek-nose">
+        <svg class="peek-svg" viewBox="150 20 910 1130" aria-hidden="true">
+          <circle cx="607" cy="933" r="72" fill="#5e5aac" stroke="#000" stroke-width="1" vector-effect="non-scaling-stroke"/>
+        </svg>
+      </div>
+      <svg class="peek-svg peek-front" viewBox="150 20 910 1130" aria-hidden="true">
+        <ellipse cx="324" cy="973" rx="157" ry="168" fill="#f8ff5d" stroke="#000" stroke-width="1" vector-effect="non-scaling-stroke"/>
+        <ellipse cx="890" cy="973" rx="157" ry="168" fill="#f8ff5d" stroke="#000" stroke-width="1" vector-effect="non-scaling-stroke"/>
+      </svg>
+    </div>
+
+    <!-- NOW PLAYING (top right on computers, below everything on phones) — filled in by nowplaying.js -->
+    <aside class="now-playing" id="now-playing" hidden>
+      <!-- top bar: LIVE | scrolling label | music note -->
+      <div class="np-header">
+        <div class="np-live" id="np-live" hidden><span class="np-dot"></span>Live</div>
+        <div class="np-label"><span class="np-label-text">What I&rsquo;m Listening 2</span></div>
+        <div class="np-note" id="np-note" role="button" tabindex="0" title="Recently played" aria-expanded="false">&#9835;</div>
+      </div>
+
+      <!-- song + play (left) | leopard (middle, only when live) | cover (right) -->
+      <div class="np-body">
+        <div class="np-text">
+          <div class="np-title" id="np-title"></div>
+          <div class="np-artist" id="np-artist"></div>
+          <div class="np-when" id="np-when" hidden></div>
+          <button type="button" class="np-button" id="np-button" hidden>&#9654; Play</button>
+        </div>
+        <img id="np-leopard" class="np-leopard" src="icons/leopard.gif" alt="">
+        <img id="np-art" class="np-art" alt="" hidden>
+      </div>
+    </aside>
+  </main>
+
+  <!-- 11:11: a big pink 11:11 over everything at 11:11 AM/PM (New York or LA time) (elevens.js) -->
+  <div class="elevens" id="elevens" hidden>
+    <div class="elevens-big">11:11</div>
+    <div class="elevens-note">It&rsquo;s 11:11!! When this happens I usually close my eyes and make a wish. Say a prayer.</div>
+  </div>
+
+  <!-- MAKE A WISH: a shooting star that flies in from behind the music box after someone opens 3 works (wish.js) -->
+  <div class="wish" id="wish" hidden aria-hidden="true">
+    <canvas class="wish-canvas" id="wish-canvas"></canvas>
+    <svg class="wish-star" id="wish-star" viewBox="-45 -45 90 90"><defs><linearGradient id="wish-rainbow" x1="0" y1="0" x2="5" y2="0" spreadMethod="repeat"><stop offset="0" stop-color="#ff1cac"/><stop offset="0.2" stop-color="#f7ff1c"/><stop offset="0.4" stop-color="#05f2e6"/><stop offset="0.6" stop-color="#37ff00"/><stop offset="0.8" stop-color="#9900ff"/><stop offset="1" stop-color="#ff1cac"/><animateTransform attributeName="gradientTransform" type="translate" from="0 0" to="-5 0" dur="7s" repeatCount="indefinite"/></linearGradient></defs><polygon class="wish-star-shape" points="0,-40 9.4,-12.9 38,-12.4 15.2,4.9 23.5,32.4 0,16 -23.5,32.4 -15.2,4.9 -38,-12.4 -9.4,-12.9" fill="#ababab" stroke="black" stroke-width="1" vector-effect="non-scaling-stroke" stroke-linejoin="round"/></svg>
+    <div class="wish-text" id="wish-text">Thanks for visiting! Now you can make a wish :)</div>
+  </div>
+
+  <!-- RECENTLY PLAYED: drops down under the music box when you click the music note (nowplaying.js) -->
+  <div class="np-recent" id="np-recent" hidden>
+    <div class="np-recent-head">👀 Recently Played 👀</div>
+    <ol class="np-recent-list" id="np-recent-list"></ol>
+  </div>
+
+  <!-- ZOOM: click an image in the column and it shows big to the left of the column; click anywhere else to close -->
+  <div class="zoom" id="zoom" hidden>
+    <div class="zoom-frame">
+      <img id="zoom-img" alt="">
+      <video id="zoom-vid" muted loop playsinline hidden></video>
+      <!-- hearts under the big image: flip back / forward through the column's images -->
+      <div class="zoom-nav" id="zoom-nav">
+        <button type="button" class="zoom-heart zoom-prev" id="zoom-prev" aria-label="Previous image"><svg viewBox="0 0 100 110" aria-hidden="true"><path class="h" d="M50 104C50 104 7 70 6 33C5.5 16 17 7 29 7C40 7 47 14 50 22C53 14 60 7 71 7C83 7 94.5 16 94 33C93 70 50 104 50 104Z"/><path class="a" d="M30.5 46H52.5V38L69.5 52L52.5 66V58H30.5Z"/></svg></button>
+        <button type="button" class="zoom-heart zoom-next" id="zoom-next" aria-label="Next image"><svg viewBox="0 0 100 110" aria-hidden="true"><path class="h" d="M50 104C50 104 7 70 6 33C5.5 16 17 7 29 7C40 7 47 14 50 22C53 14 60 7 71 7C83 7 94.5 16 94 33C93 70 50 104 50 104Z"/><path class="a" d="M30.5 46H52.5V38L69.5 52L52.5 66V58H30.5Z"/></svg></button>
+      </div>
+      <!-- FOCUS: turns everything behind the big image white (the column stays) -->
+      <button type="button" class="zoom-focus" id="zoom-focus" aria-pressed="false">Focus: On</button>
+    </div>
+  </div>
+
+  <!-- the viewer that opens when you click a project -->
+  <div class="viewer" id="viewer" hidden>
+    <button type="button" class="v-close" id="v-close" aria-label="Close">&times;</button>
+    <button type="button" class="v-prev" id="v-prev" aria-label="Previous image">&lsaquo;</button>
+    <div class="v-stage"><img id="v-img" alt=""><div class="v-videos" id="v-videos" hidden></div></div>
+    <button type="button" class="v-next" id="v-next" aria-label="Next image">&rsaquo;</button>
+    <div class="v-caption">
+      <div class="v-title" id="v-title"></div>
+      <div class="v-details" id="v-details"></div>
+      <a class="v-link" id="v-link" target="_blank" rel="noopener" hidden></a>
+      <div class="v-count" id="v-count"></div>
+    </div>
+  </div>
+
+  <!-- THE LEOPARD: rises up from behind the name card after 10 emojis or 10 minutes on the site (leopard.js) -->
+  <div class="leopard" id="leopard" hidden>
+   <div class="leo-inner">
+    <p class="leo-text">Thanks for hanging out with me.</p>
+    <svg class="leo-svg" viewBox="30 85 700 1040" aria-hidden="true">
+          <defs>
+            <linearGradient id="leo-rainbow" x1="0" y1="0" x2="5" y2="0" spreadMethod="repeat"><stop offset="0" stop-color="#ff1cac"/><stop offset="0.2" stop-color="#f7ff1c"/><stop offset="0.4" stop-color="#05f2e6"/><stop offset="0.6" stop-color="#37ff00"/><stop offset="0.8" stop-color="#9900ff"/><stop offset="1" stop-color="#ff1cac"/><animateTransform attributeName="gradientTransform" type="translate" from="0 0" to="-5 0" dur="2.5s" repeatCount="indefinite"/></linearGradient>
+            <clipPath id="leo-head-clip"><path d="M682 452 A305 232 0 0 0 72 452 C72.0 472.0 74.3 484.5 78.6 500.0 C82.9 515.5 89.5 530.8 97.6 545.0 C105.7 559.2 118.5 574.8 127.1 585.0 C135.6 595.2 141.6 599.0 148.9 606.0 C147.9 614.7 145.3 621.7 146.0 632.0 C146.7 642.3 147.7 653.0 153.0 668.0 C158.3 683.0 166.5 704.7 178.0 722.0 C189.5 739.3 203.3 757.3 222.0 772.0 C240.7 786.7 264.2 800.0 290.0 810.0 C315.8 820.0 350.3 832.0 377.0 832.0 C403.7 832.0 438.2 820.0 464.0 810.0 C489.8 800.0 513.3 786.7 532.0 772.0 C550.7 757.3 564.5 739.3 576.0 722.0 C587.5 704.7 595.7 683.0 601.0 668.0 C606.3 653.0 607.3 642.3 608.0 632.0 C608.7 621.7 606.1 614.7 605.1 606.0 C612.4 599.0 618.4 595.2 626.9 585.0 C635.5 574.8 648.3 559.2 656.4 545.0 C664.5 530.8 671.1 515.5 675.4 500.0 C679.7 484.5 682.0 472.0 682.0 452.0 Z"/></clipPath>
+            <clipPath id="leo-paw-clip"><circle cx="169" cy="840" r="128"/><circle cx="585" cy="840" r="128"/></clipPath>
+          </defs>
+          <polygon points="226,126 158,328 286,278" fill="#f9e000" stroke="#000" stroke-width="1" vector-effect="non-scaling-stroke"/>
+          <polygon points="528,126 596,328 468,278" fill="#f9e000" stroke="#000" stroke-width="1" vector-effect="non-scaling-stroke"/>
+          <polygon points="228,190 194,290 257,266" fill="#00c700" stroke="#000" stroke-width="1" vector-effect="non-scaling-stroke"/>
+          <polygon points="526,190 560,290 497,266" fill="#00c700" stroke="#000" stroke-width="1" vector-effect="non-scaling-stroke"/>
+          <path d="M682 452 A305 232 0 0 0 72 452 C72.0 472.0 74.3 484.5 78.6 500.0 C82.9 515.5 89.5 530.8 97.6 545.0 C105.7 559.2 118.5 574.8 127.1 585.0 C135.6 595.2 141.6 599.0 148.9 606.0 C147.9 614.7 145.3 621.7 146.0 632.0 C146.7 642.3 147.7 653.0 153.0 668.0 C158.3 683.0 166.5 704.7 178.0 722.0 C189.5 739.3 203.3 757.3 222.0 772.0 C240.7 786.7 264.2 800.0 290.0 810.0 C315.8 820.0 350.3 832.0 377.0 832.0 C403.7 832.0 438.2 820.0 464.0 810.0 C489.8 800.0 513.3 786.7 532.0 772.0 C550.7 757.3 564.5 739.3 576.0 722.0 C587.5 704.7 595.7 683.0 601.0 668.0 C606.3 653.0 607.3 642.3 608.0 632.0 C608.7 621.7 606.1 614.7 605.1 606.0 C612.4 599.0 618.4 595.2 626.9 585.0 C635.5 574.8 648.3 559.2 656.4 545.0 C664.5 530.8 671.1 515.5 675.4 500.0 C679.7 484.5 682.0 472.0 682.0 452.0 Z" fill="#f9e000"/>
+          <g class="leo-spots" fill="#8c7430" clip-path="url(#leo-head-clip)"><circle cx="-423" cy="175" r="32"/><circle cx="-263" cy="175" r="32"/><circle cx="-103" cy="175" r="32"/><circle cx="57" cy="175" r="32"/><circle cx="217" cy="175" r="32"/><circle cx="377" cy="175" r="32"/><circle cx="537" cy="175" r="32"/><circle cx="697" cy="175" r="32"/><circle cx="857" cy="175" r="32"/><circle cx="1017" cy="175" r="32"/><circle cx="1177" cy="175" r="32"/><circle cx="-343" cy="255" r="32"/><circle cx="-183" cy="255" r="32"/><circle cx="-23" cy="255" r="32"/><circle cx="137" cy="255" r="32"/><circle cx="297" cy="255" r="32"/><circle cx="457" cy="255" r="32"/><circle cx="617" cy="255" r="32"/><circle cx="777" cy="255" r="32"/><circle cx="937" cy="255" r="32"/><circle cx="1097" cy="255" r="32"/><circle cx="1257" cy="255" r="32"/><circle cx="-423" cy="335" r="32"/><circle cx="-263" cy="335" r="32"/><circle cx="-103" cy="335" r="32"/><circle cx="57" cy="335" r="32"/><circle cx="217" cy="335" r="32"/><circle cx="377" cy="335" r="32"/><circle cx="537" cy="335" r="32"/><circle cx="697" cy="335" r="32"/><circle cx="857" cy="335" r="32"/><circle cx="1017" cy="335" r="32"/><circle cx="1177" cy="335" r="32"/><circle cx="-343" cy="415" r="32"/><circle cx="-183" cy="415" r="32"/><circle cx="-23" cy="415" r="32"/><circle cx="137" cy="415" r="32"/><circle cx="297" cy="415" r="32"/><circle cx="457" cy="415" r="32"/><circle cx="617" cy="415" r="32"/><circle cx="777" cy="415" r="32"/><circle cx="937" cy="415" r="32"/><circle cx="1097" cy="415" r="32"/><circle cx="1257" cy="415" r="32"/><circle cx="-423" cy="495" r="32"/><circle cx="-263" cy="495" r="32"/><circle cx="-103" cy="495" r="32"/><circle cx="57" cy="495" r="32"/><circle cx="217" cy="495" r="32"/><circle cx="377" cy="495" r="32"/><circle cx="537" cy="495" r="32"/><circle cx="697" cy="495" r="32"/><circle cx="857" cy="495" r="32"/><circle cx="1017" cy="495" r="32"/><circle cx="1177" cy="495" r="32"/><circle cx="-343" cy="575" r="32"/><circle cx="-183" cy="575" r="32"/><circle cx="-23" cy="575" r="32"/><circle cx="137" cy="575" r="32"/><circle cx="297" cy="575" r="32"/><circle cx="457" cy="575" r="32"/><circle cx="617" cy="575" r="32"/><circle cx="777" cy="575" r="32"/><circle cx="937" cy="575" r="32"/><circle cx="1097" cy="575" r="32"/><circle cx="1257" cy="575" r="32"/><circle cx="-423" cy="655" r="32"/><circle cx="-263" cy="655" r="32"/><circle cx="-103" cy="655" r="32"/><circle cx="57" cy="655" r="32"/><circle cx="217" cy="655" r="32"/><circle cx="377" cy="655" r="32"/><circle cx="537" cy="655" r="32"/><circle cx="697" cy="655" r="32"/><circle cx="857" cy="655" r="32"/><circle cx="1017" cy="655" r="32"/><circle cx="1177" cy="655" r="32"/><circle cx="-343" cy="735" r="32"/><circle cx="-183" cy="735" r="32"/><circle cx="-23" cy="735" r="32"/><circle cx="297" cy="735" r="32"/><circle cx="457" cy="735" r="32"/><circle cx="777" cy="735" r="32"/><circle cx="937" cy="735" r="32"/><circle cx="1097" cy="735" r="32"/><circle cx="1257" cy="735" r="32"/><circle cx="-423" cy="815" r="32"/><circle cx="-263" cy="815" r="32"/><circle cx="-103" cy="815" r="32"/><circle cx="857" cy="815" r="32"/><circle cx="1017" cy="815" r="32"/><circle cx="1177" cy="815" r="32"/></g>
+          <path d="M682 452 A305 232 0 0 0 72 452 C72.0 472.0 74.3 484.5 78.6 500.0 C82.9 515.5 89.5 530.8 97.6 545.0 C105.7 559.2 118.5 574.8 127.1 585.0 C135.6 595.2 141.6 599.0 148.9 606.0 C147.9 614.7 145.3 621.7 146.0 632.0 C146.7 642.3 147.7 653.0 153.0 668.0 C158.3 683.0 166.5 704.7 178.0 722.0 C189.5 739.3 203.3 757.3 222.0 772.0 C240.7 786.7 264.2 800.0 290.0 810.0 C315.8 820.0 350.3 832.0 377.0 832.0 C403.7 832.0 438.2 820.0 464.0 810.0 C489.8 800.0 513.3 786.7 532.0 772.0 C550.7 757.3 564.5 739.3 576.0 722.0 C587.5 704.7 595.7 683.0 601.0 668.0 C606.3 653.0 607.3 642.3 608.0 632.0 C608.7 621.7 606.1 614.7 605.1 606.0 C612.4 599.0 618.4 595.2 626.9 585.0 C635.5 574.8 648.3 559.2 656.4 545.0 C664.5 530.8 671.1 515.5 675.4 500.0 C679.7 484.5 682.0 472.0 682.0 452.0 Z" fill="none" stroke="#000" stroke-width="1" vector-effect="non-scaling-stroke"/>
+          <circle cx="301" cy="515" r="40" fill="#fff" stroke="#000" stroke-width="1" vector-effect="non-scaling-stroke"/>
+          <ellipse cx="270" cy="522.5" rx="43" ry="39.5" fill="#000"/>
+          <circle cx="465" cy="515" r="40" fill="#fff" stroke="#000" stroke-width="1" vector-effect="non-scaling-stroke"/>
+          <ellipse cx="434" cy="522.5" rx="43" ry="39.5" fill="#000"/>
+          <g fill="#f9e000"><circle cx="169" cy="840" r="128"/><circle cx="585" cy="840" r="128"/></g>
+          <g class="leo-spots" fill="#8c7430" clip-path="url(#leo-paw-clip)"><circle cx="137" cy="735" r="32"/><circle cx="617" cy="735" r="32"/><circle cx="57" cy="815" r="32"/><circle cx="217" cy="815" r="32"/><circle cx="537" cy="815" r="32"/><circle cx="697" cy="815" r="32"/><circle cx="137" cy="895" r="32"/><circle cx="297" cy="895" r="32"/><circle cx="457" cy="895" r="32"/><circle cx="617" cy="895" r="32"/><circle cx="217" cy="975" r="32"/><circle cx="537" cy="975" r="32"/></g>
+          <g fill="none" stroke="#000" stroke-width="1" vector-effect="non-scaling-stroke"><circle cx="169" cy="840" r="128"/><circle cx="585" cy="840" r="128"/></g>
+          <circle cx="377" cy="789" r="43" fill="#ff3131" stroke="#000" stroke-width="1" vector-effect="non-scaling-stroke"/>
+          <polygon points="256.0,869.0 290.1,952.1 379.6,958.8 311.2,1016.9 332.4,1104.2 256.0,1057.0 179.6,1104.2 200.8,1016.9 132.4,958.8 221.9,952.1" class="leo-star" fill="#00ffe6" stroke="#000" stroke-width="1" vector-effect="non-scaling-stroke"/>
+          <polygon points="498.0,869.0 532.1,952.1 621.6,958.8 553.2,1016.9 574.4,1104.2 498.0,1057.0 421.6,1104.2 442.8,1016.9 374.4,958.8 463.9,952.1" class="leo-star" fill="#00ffe6" stroke="#000" stroke-width="1" vector-effect="non-scaling-stroke"/>
+        </svg>
+   </div>
+  </div>
+
+  <script src="home.js?v=22"></script>
+  <script src="work-data.js?v=45"></script>
+  <script src="work.js?v=36"></script>
+  <script src="wish.js?v=19"></script>
+  <script src="drops.js?v=12"></script>
+  <script src="watch.js?v=5"></script>
+  <script src="peek.js?v=6"></script>
+  <script src="elevens.js?v=3"></script>
+  <script src="thoughts.js?v=9"></script>
+  <script src="nowplaying.js?v=9"></script>
+  <script src="leopard.js?v=4"></script>
+</body>
+</html>
